@@ -1,0 +1,43 @@
+version: '3.1'
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  nuxt:
+    container_name: cms_node_pm2
+    hostname: nuxt
+    build:
+      context: ./public-html/${PROJECT_DIR}
+    image: idiots718/nuxtjs-basic-ssr:latest
+    restart: unless-stopped
+    user: root:root
+    environment:
+      - NODE_PORT=3000
+      - BUILD_FLAG=production
+    networks:
+      - app-tier
+    expose:
+      - '3000'
+
+  httpd:
+    container_name: cms_nginx
+    hostname: nginx
+    image: bitnami/nginx:${NGINX_VERSION}-${OS_VERSION}
+    user: root:root
+    restart: unless-stopped
+    environment:
+      - 'TZ=${TIMEZONE}'
+    depends_on:
+      - nuxt
+    networks:
+      - app-tier
+    ports:
+      - '80:8080'
+      - '443:8443'
+    volumes:
+      - ./config/nginx/vhost:/opt/bitnami/nginx/conf/vhosts:rw
+      - ./logs/nginx/${NGINX_VERSION}:/opt/bitnami/nginx/logs:rw
+      - ./public-html:/app:rw
+

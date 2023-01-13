@@ -1,0 +1,29 @@
+{
+  "name": "nuxt_app",
+  "version": "1.0.0",
+  "description": "My Nuxt.js project",
+  "author": "Qhoi",
+  "private": true,
+  "scripts": {
+    "clean": "rimraf .nuxt && rimraf dist",
+    "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
+    "build": "npm run clean && nuxt build",
+    "start": "cross-env NODE_ENV=production node server/index.js",
+    "generate": "nuxt generate",
+    "start:production": "pm2 start ecosystem.config.js --only nuxt-app && pm2 logs",
+    "start:staging": "pm2 start ecosystem.config.js --only nuxt-staging-app && pm2 logs",
+    "reload:production": "pm2 reload ecosystem.config.js --only nuxt-app",
+    "reload:staging": "pm2 reload ecosystem.config.js --only nuxt-staging-app",
+    "test": "jest"
+  },
+  "dependencies": {
+    "core-js": "^3.27.1",
+    "nuxt": "^2.15.8",
+    "vue": "^2.7.10",
+    "vue-server-renderer": "^2.7.10",
+    "vue-template-compiler": "^2.7.10",
+    "rimraf": "^3.0.0",
+    "nuxt-start": "^2.10.2"
+  },
+  "devDependencies": {}
+}
